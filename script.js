@@ -9,7 +9,6 @@ const themeToggleBtn = document.querySelector("#theme-toggle-btn");
 /* =========================== */
 /* 1) إعداد الـ API الجديد     */
 /* =========================== */
-// لا يوجد مفتاح الآن
 const API_URL = "https://chatapi.artificial.chat/api/gpt";
 
 let controller, typingInterval;
@@ -41,8 +40,7 @@ const typingEffect = (text, textElement, botMsgDiv) => {
 
   typingInterval = setInterval(() => {
     if (wordIndex < words.length) {
-      textElement.textContent +=
-        (wordIndex === 0 ? "" : " ") + words[wordIndex++];
+      textElement.textContent += (wordIndex === 0 ? "" : " ") + words[wordIndex++];
       scrollToBottom();
     } else {
       clearInterval(typingInterval);
@@ -60,7 +58,6 @@ const generateResponse = async (botMsgDiv) => {
   controller = new AbortController();
 
   try {
-    // الخدمة لا تدعم سجل الدردشة ولا الملفات، نرسل السؤال فقط
     const res = await fetch(API_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -139,75 +136,4 @@ fileInput.addEventListener("change", () => {
     fileUploadWrapper.querySelector(".file-preview").src = e.target.result;
     fileUploadWrapper.classList.add(
       "active",
-      isImage ? "img-attached" : "file-attached"
-    );
-
-    // حفظ بيانات الملف (لن تُرسل فعليًا مع هذا الـ API)
-    userData.file = {
-      fileName: file.name,
-      data: base64String,
-      mime_type: file.type,
-      isImage,
-    };
-  };
-});
-
-// إلغاء الملف
-document
-  .querySelector("#cancel-file-btn")
-  .addEventListener("click", () => {
-    userData.file = {};
-    fileUploadWrapper.classList.remove("file-attached", "img-attached", "active");
-  });
-
-// إيقاف الاستجابة
-document
-  .querySelector("#stop-response-btn")
-  .addEventListener("click", () => {
-    controller?.abort();
-    userData.file = {};
-    clearInterval(typingInterval);
-    const loadingMsg = chatsContainer.querySelector(".bot-message.loading");
-    if (loadingMsg) loadingMsg.classList.remove("loading");
-    document.body.classList.remove("bot-responding");
-  });
-
-// تبديل الثيم
-themeToggleBtn.addEventListener("click", () => {
-  const isLight = document.body.classList.toggle("light-theme");
-  localStorage.setItem("themeColor", isLight ? "light_mode" : "dark_mode");
-  themeToggleBtn.textContent = isLight ? "dark_mode" : "light_mode";
-});
-
-// حذف المحادثة
-document
-  .querySelector("#delete-chats-btn")
-  .addEventListener("click", () => {
-    chatHistory.length = 0;
-    chatsContainer.innerHTML = "";
-    document.body.classList.remove("chats-active", "bot-responding");
-  });
-
-// الضغط على الاقتراحات الجاهزة
-document.querySelectorAll(".suggestions-item").forEach((item) =>
-  item.addEventListener("click", () => {
-    promptInput.value = item.querySelector(".text").textContent;
-    promptForm.dispatchEvent(new Event("submit"));
-  })
-);
-
-// إخفاء الأزرار في الجوال وقت الكتابة
-document.addEventListener("click", ({ target }) => {
-  const wrapper = document.querySelector(".prompt-wrapper");
-  const shouldHide =
-    target.classList.contains("prompt-input") ||
-    (wrapper.classList.contains("hide-controls") &&
-      (target.id === "add-file-btn" || target.id === "stop-response-btn"));
-  wrapper.classList.toggle("hide-controls", shouldHide);
-});
-
-// مستمعي الأحداث الأساسيين
-promptForm.addEventListener("submit", handleFormSubmit);
-promptForm
-  .querySelector("#add-file-btn")
-  .addEventListener("click", () => fileInput.click());
+      isImage ? "img-attached" : "file
