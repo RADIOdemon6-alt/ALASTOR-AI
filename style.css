@@ -1,5 +1,5 @@
 /* =========================
-   هوية لونية لمطعم مشويات فخم
+   ألوان وهوية مطعم روستو
    ========================= */
 :root {
   --red: #c1272d;
@@ -11,10 +11,15 @@
 /* =========================
    إعدادات عامة
    ========================= */
-html, body {
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
   margin: 0;
   padding: 0;
-  font-family: "Tajawal", Arial, sans-serif;
+  font-family: 'Tajawal', Arial, sans-serif;
   background: var(--beige);
   color: var(--dark);
   height: 100%;
@@ -24,26 +29,28 @@ html, body {
    رأس الصفحة
    ========================= */
 .site-header {
-  background: var(--red);
+  background-color: var(--red);
   color: #fff;
-  padding: 12px 20px;
+  padding: 16px 24px;
   text-align: center;
-  box-shadow: 0 4px 8px rgb(0 0 0 / 0.2);
+  font-size: 1.5rem;
+  font-weight: 700;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 /* =========================
-   عناصر التحكم (بحث + تصفية)
+   أدوات التحكم (بحث وتصفية)
    ========================= */
 .controls {
   display: flex;
-  gap: 10px;
-  padding: 12px 20px;
+  gap: 12px;
+  padding: 16px 24px;
   justify-content: center;
-  background: var(--beige);
   position: sticky;
   top: 0;
   z-index: 10;
-  box-shadow: 0 2px 6px rgb(0 0 0 / 0.05);
+  background-color: var(--beige);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
 .controls input,
@@ -52,16 +59,19 @@ html, body {
   border: 2px solid var(--brown);
   border-radius: 8px;
   font-size: 1rem;
-  min-width: 170px;
+  min-width: 180px;
+  background-color: #fff;
+  color: var(--dark);
 }
 
 /* =========================
-   قائمة الأطباق — Scroll Snap
+   قائمة الأطباق (Scroll Snap)
    ========================= */
 .menu {
-  height: calc(100vh - 120px);
+  height: calc(100vh - 130px);
   overflow-y: auto;
   scroll-snap-type: y mandatory;
+  padding: 20px;
 }
 
 .menu::-webkit-scrollbar {
@@ -73,7 +83,7 @@ html, body {
 }
 
 /* =========================
-   عنصر الوجبة
+   عنصر الطبق
    ========================= */
 .menu-item {
   scroll-snap-align: start;
@@ -84,10 +94,6 @@ html, body {
   gap: 16px;
   height: 90vh;
   padding: 20px;
-  box-sizing: border-box;
-  position: relative;
-
-  /* حركة الظهور */
   opacity: 0;
   transform: translateY(40px);
   transition: opacity 0.6s ease, transform 0.6s ease;
@@ -99,14 +105,14 @@ html, body {
 }
 
 /* =========================
-   الصورة
+   صورة الطبق
    ========================= */
 .image-wrapper {
   width: 260px;
   height: 260px;
-  position: relative;
-  overflow: hidden;
   border-radius: 18px;
+  overflow: hidden;
+  position: relative;
 }
 
 .image-wrapper img {
@@ -116,30 +122,27 @@ html, body {
   display: block;
 }
 
-/* زخرفة الإطار */
 .image-wrapper::before {
   content: "";
   position: absolute;
   inset: 0;
   border: 4px solid var(--red);
   border-radius: 18px;
+  box-shadow: inset 0 0 0 3px #fff, inset 0 0 0 6px var(--red);
   pointer-events: none;
-  box-shadow:
-    inset 0 0 0 3px #fff,
-    inset 0 0 0 6px var(--red);
 }
 
 /* =========================
-   تفاصيل الطبق
+   معلومات الطبق
    ========================= */
 .dish-info {
-  text-align: center;
   background: var(--brown);
   color: #fff;
-  padding: 12px 18px;
+  text-align: center;
+  padding: 12px 16px;
   border-radius: 14px;
   max-width: 260px;
-  box-shadow: 0 4px 12px rgb(0 0 0 / 0.2);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .dish-info h2 {
@@ -148,7 +151,7 @@ html, body {
 }
 
 .dish-info .price {
-  font-weight: 700;
+  font-weight: bold;
   font-size: 1.1rem;
 }
 
