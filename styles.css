@@ -7,119 +7,80 @@
 }
 
 /* ========== إعداد عام ========== */
-*{box-sizing:border-box;}
+*{box-sizing:border-box;margin:0;padding:0}
 html,body{
-  margin:0;padding:0;
   font-family:'Tajawal',Arial,sans-serif;
-  background:var(--beige);color:var(--dark);
-  height:100%;
+  background:var(--beige);color:var(--dark);height:100%;
 }
 
 /* رأس الصفحة */
 .site-header{
   background:var(--red);color:#fff;
-  padding:16px 24px;text-align:center;
-  font-size:1.5rem;font-weight:700;
+  padding:12px 20px;text-align:center;
+  font:700 1.4rem/1 'Tajawal',sans-serif;
   box-shadow:0 4px 8px rgba(0,0,0,.2);
 }
 
 /* أدوات البحث/الفرز */
 .controls{
-  display:flex;gap:12px;justify-content:center;
-  padding:16px 24px;background:var(--beige);
+  display:flex;gap:10px;justify-content:center;
+  padding:12px 20px;background:var(--beige);
   position:sticky;top:0;z-index:10;
   box-shadow:0 2px 6px rgba(0,0,0,.05);
 }
 .controls input,.controls select{
-  padding:10px 14px;border:2px solid var(--brown);
-  border-radius:8px;font-size:1rem;min-width:180px;
+  flex:1 1 150px;
+  padding:8px 12px;border:2px solid var(--brown);
+  border-radius:8px;font-size:.95rem;
   background:#fff;color:var(--dark);
 }
 
-/* قائمة الأطباق (Scroll-Snap) */
+/* ========= القائمة ========= */
 .menu{
-  height:calc(100vh - 130px);
-  overflow-y:auto;scroll-snap-type:y mandatory;
-  padding:20px;
+  height:calc(100vh - 110px);
+  overflow-y:auto;padding:16px;
 }
-.menu::-webkit-scrollbar{width:6px;}
-.menu::-webkit-scrollbar-thumb{background:var(--brown);border-radius:3px;}
+.menu::-webkit-scrollbar{width:5px}
+.menu::-webkit-scrollbar-thumb{background:var(--brown);border-radius:3px}
 
-/* بطاقة الطبق */
+/* ========= بطاقة الطبق ========= */
 .menu-item{
-  scroll-snap-align:start;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  gap:16px;height:90vh;padding:20px;
-  opacity:0;transform:translateY(40px);
-  transition:opacity .6s ease,transform .6s ease;
+  width:100%;max-width:100vw;
+  display:flex;flex-direction:column;align-items:center;gap:14px;
+  padding:16px;margin-bottom:22px;
+  opacity:0;transform:translateY(30px);
+  transition:opacity .5s ease,transform .5s ease;
 }
-.menu-item.visible{opacity:1;transform:none;}
+.menu-item.visible{opacity:1;transform:none}
 
 /* صورة الطبق */
 .image-wrapper{
-  width:260px;height:260px;border-radius:18px;overflow:hidden;position:relative;
+  width:100%;max-width:200px;aspect-ratio:1/1;
+  border-radius:16px;overflow:hidden;position:relative;margin:auto;
 }
-.image-wrapper img{width:100%;height:100%;object-fit:cover;display:block;}
+.image-wrapper img{width:100%;height:100%;object-fit:cover;display:block}
 .image-wrapper::before{
-  content:"";position:absolute;inset:0;border:4px solid var(--red);
-  border-radius:18px;box-shadow:inset 0 0 0 3px #fff,inset 0 0 0 6px var(--red);
+  content:"";position:absolute;inset:0;border:3px solid var(--red);
+  border-radius:16px;box-shadow:inset 0 0 0 2px #fff,inset 0 0 0 5px var(--red);
   pointer-events:none;
 }
 
 /* تفاصيل الطبق */
 .dish-info{
   background:var(--brown);color:#fff;text-align:center;
-  padding:12px 16px;border-radius:14px;max-width:260px;
-  box-shadow:0 4px 12px rgba(0,0,0,.2);
+  padding:10px 14px;border-radius:12px;max-width:200px;
+  box-shadow:0 3px 8px rgba(0,0,0,.18);font-size:.9rem;
 }
-.dish-info h2{margin:0 0 6px;font-size:1.25rem;}
-.dish-info .price{font-weight:700;font-size:1.1rem;}
-.dish-info .rating{margin-top:4px;font-size:1rem;letter-spacing:1px;color:gold;}
-.image-wrapper {
-  width: 100%;
-  max-width: 280px;
-  aspect-ratio: 1 / 1;
-  height: auto;
-  border-radius: 18px;
-  overflow: hidden;
-  position: relative;
-  margin: auto;
+.dish-info h2{margin:0 0 4px;font-size:1.05rem}
+.dish-info .price{font-weight:700;font-size:1rem}
+.dish-info .rating{margin-top:3px;font-size:.9rem;letter-spacing:.5px;color:gold}
+
+/* ========= تحسينات للشاشات الأصغر ========= */
+@media (max-width:480px){
+  .controls{flex-direction:column;align-items:center}
+  .controls input,.controls select{max-width:92%}
+  .dish-info{max-width:92%;font-size:.85rem}
+  .dish-info h2{font-size:1rem}
+  .dish-info .price{font-size:.95rem}
+  .dish-info .rating{font-size:.85rem}
 }
-
-.menu-item {
-  width: 100%;
-  max-width: 100vw;
-  padding: 20px;
-  box-sizing: border-box;
-}
-
-@media (max-width: 480px) {
-  .dish-info {
-    padding: 10px;
-    font-size: 0.95rem;
-    max-width: 90%;
-  }
-
-  .dish-info h2 {
-    font-size: 1.1rem;
-  }
-
-  .dish-info .price {
-    font-size: 1rem;
-  }
-
-  .dish-info .rating {
-    font-size: 0.95rem;
-  }
-
-  .controls {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .controls input,
-  .controls select {
-    width: 100%;
-    max-width: 90%;
-  }
-} 
