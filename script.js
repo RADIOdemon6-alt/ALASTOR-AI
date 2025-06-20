@@ -1,139 +1,79 @@
-const container = document.querySelector(".container");
-const chatsContainer = document.querySelector(".chats-container");
-const promptForm = document.querySelector(".prompt-form");
-const promptInput = promptForm.querySelector(".prompt-input");
-const fileInput = promptForm.querySelector("#file-input");
-const fileUploadWrapper = promptForm.querySelector(".file-upload-wrapper");
-const themeToggleBtn = document.querySelector("#theme-toggle-btn");
+// بيانات الأطباق
+const dishes = [
+  { name: "شاورما دجاج",   price: 25, rating: 4.5, img: "shawarma.jpg" },
+  { name: "كفتة مشوية",    price: 45, rating: 4.8, img: "kofta.jpg" },
+  { name: "برجر لحم",      price: 60, rating: 4.2, img: "burger.jpg" },
+  { name: "بيتزا مارجريتا",price: 75, rating: 4.0, img: "pizza.jpg" },
+  { name: "عصير مانجو",    price: 20, rating: 4.7, img: "mango.jpg" },
+  { name: "فتة شاورما",    price: 65, rating: 4.6, img: "fatta.jpg" },
+];
 
-/* =========================== */
-/* 1) إعداد الـ API الجديد     */
-/* =========================== */
-const API_URL = "https://chatapi.artificial.chat/api/gpt";
+// عناصر DOM
+const menuContainer = document.getElementById("menu");
+const searchInput   = document.getElementById("search");
+const priceFilter   = document.getElementById("price");
 
-let controller, typingInterval;
-const chatHistory = [];
-const userData = { message: "", file: {} };
-
-// ضبط الثيم من LocalStorage
-const isLightTheme = localStorage.getItem("themeColor") === "light_mode";
-document.body.classList.toggle("light-theme", isLightTheme);
-themeToggleBtn.textContent = isLightTheme ? "dark_mode" : "light_mode";
-
-// إنشاء عنصر رسالة HTML
-const createMessageElement = (content, ...classes) => {
-  const div = document.createElement("div");
-  div.classList.add("message", ...classes);
-  div.innerHTML = content;
-  return div;
-};
-
-// تمرير المحتوى للأسفل
-const scrollToBottom = () =>
-  container.scrollTo({ top: container.scrollHeight, behavior: "smooth" });
-
-// تأثير الكتابة المتدرّجة
-const typingEffect = (text, textElement, botMsgDiv) => {
-  textElement.textContent = "";
-  const words = text.split(" ");
-  let wordIndex = 0;
-
-  typingInterval = setInterval(() => {
-    if (wordIndex < words.length) {
-      textElement.textContent += (wordIndex === 0 ? "" : " ") + words[wordIndex++];
-      scrollToBottom();
-    } else {
-      clearInterval(typingInterval);
-      botMsgDiv.classList.remove("loading");
-      document.body.classList.remove("bot-responding");
-    }
-  }, 40);
-};
-
-/* ==================================== */
-/* 2) دالة generateResponse الجديدة     */
-/* ==================================== */
-const generateResponse = async (botMsgDiv) => {
-  const textElement = botMsgDiv.querySelector(".message-text");
-  controller = new AbortController();
-
-  try {
-    const res = await fetch(API_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message: userData.message }),
-      signal: controller.signal,
-    });
-
-    const data = await res.json();
-    if (!res.ok || !data?.message) throw new Error("API Error");
-
-    const reply = data.message.trim();
-    typingEffect(reply, textElement, botMsgDiv);
-  } catch (err) {
-    textElement.textContent =
-      err.name === "AbortError"
-        ? "تم إيقاف الاستجابة."
-        : "حدث خطأ في الاتصال.";
-    textElement.style.color = "#d62939";
-    botMsgDiv.classList.remove("loading");
-    document.body.classList.remove("bot-responding");
-    scrollToBottom();
-  } finally {
-    userData.file = {}; // تنظيف أي ملف مؤجل
-  }
-};
-
-// معالجة إرسال النموذج
-const handleFormSubmit = (e) => {
-  e.preventDefault();
-  const userMessage = promptInput.value.trim();
-  if (!userMessage || document.body.classList.contains("bot-responding")) return;
-
-  userData.message = userMessage;
-  promptInput.value = "";
-  document.body.classList.add("chats-active", "bot-responding");
-  fileUploadWrapper.classList.remove("file-attached", "img-attached", "active");
-
-  // رسالة المستخدم
-  const userMsgHTML = `
-    <p class="message-text"></p>
-    ${
-      userData.file.data
-        ? userData.file.isImage
-          ? `<img src="data:${userData.file.mime_type};base64,${userData.file.data}" class="img-attachment" />`
-          : `<p class="file-attachment"><span class="material-symbols-rounded">description</span>${userData.file.fileName}</p>`
-        : ""
-    }
+// توليد بطاقة طبق
+function createDishCard({ name, price, rating, img }) {
+  const item = document.createElement("article");
+  item.className = "menu-item";
+  item.innerHTML = `
+    <div class="image-wrapper">
+      <img src="${img}" alt="${name}">
+    </div>
+    <div class="dish-info">
+      <h2>${name}</h2>
+      <div class="price">${price} ج</div>
+      <div class="rating">${"★".repeat(Math.round(rating))}</div>
+    </div>
   `;
-  const userMsgDiv = createMessageElement(userMsgHTML, "user-message");
-  userMsgDiv.querySelector(".message-text").textContent = userData.message;
-  chatsContainer.appendChild(userMsgDiv);
-  scrollToBottom();
+  return item;
+}
 
-  setTimeout(() => {
-    // رسالة البوت المبدئية
-    const botMsgHTML = `<img class="avatar" src="gemini.svg" /> <p class="message-text">Just a sec...</p>`;
-    const botMsgDiv = createMessageElement(botMsgHTML, "bot-message", "loading");
-    chatsContainer.appendChild(botMsgDiv);
-    scrollToBottom();
-    generateResponse(botMsgDiv);
-  }, 600);
-};
+// عرض القائمة
+function renderMenu(list) {
+  menuContainer.innerHTML = "";
+  list.forEach(dish => menuContainer.appendChild(createDishCard(dish)));
+  attachObservers();           // إعادة تفعيل الـ IntersectionObserver بعد إعادة الرسم
+}
 
-// رفع ملف
-fileInput.addEventListener("change", () => {
-  const file = fileInput.files[0];
-  if (!file) return;
+// فلترة حسب البحث والسعر
+function filterMenu() {
+  const term      = searchInput.value.trim().toLowerCase();
+  const priceCat  = priceFilter.value;
 
-  const isImage = file.type.startsWith("image/");
-  const reader = new FileReader();
-  reader.readAsDataURL(file);
+  const filtered = dishes.filter(d => {
+    const matchText  = d.name.toLowerCase().includes(term);
+    let matchPrice   = true;
 
-  reader.onload = (e) => {
-    fileInput.value = "";
-    const base64String = e.target.result.split(",")[1];
-    fileUploadWrapper.querySelector(".file-preview").src = e.target.result;
-    fileUploadWrapper.classList.add(
-      "active",
-      isImage ? "img-attached" : "file
+    if (priceCat === "cheap")       matchPrice = d.price <= 30;
+    else if (priceCat === "medium") matchPrice = d.price > 30 && d.price <= 60;
+    else if (priceCat === "expensive") matchPrice = d.price > 60;
+
+    return matchText && matchPrice;
+  });
+
+  renderMenu(filtered);
+}
+
+// مستمعو الأحداث
+searchInput.addEventListener("input",  filterMenu);
+priceFilter.addEventListener("change", filterMenu);
+
+// مراقبة الظهور والاختفاء
+let observer;
+function attachObservers() {
+  const options = { threshold: 0.25 }; // ظهور 25٪ من العنصر
+  if (observer) observer.disconnect(); // تنظيف مراقبات قديمة
+
+  observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      entry.target.classList.toggle("visible", entry.isIntersecting);
+    });
+  }, options);
+
+  document.querySelectorAll(".menu-item").forEach(item => observer.observe(item));
+}
+
+// عرض جميع الأطباق عند التحميل
+renderMenu(dishes);
