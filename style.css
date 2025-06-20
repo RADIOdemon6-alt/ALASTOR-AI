@@ -1,163 +1,77 @@
-/* =========================
-   ألوان وهوية مطعم روستو
-   ========================= */
-:root {
-  --red: #c1272d;
-  --brown: #a67c52;
-  --beige: #f5efe0;
-  --dark: #1e1d1d;
+/* ========== هوية ألوان روستو ========== */
+:root{
+  --red:#c1272d;
+  --brown:#a67c52;
+  --beige:#f5efe0;
+  --dark:#1e1d1d;
 }
 
-/* =========================
-   إعدادات عامة
-   ========================= */
-* {
-  box-sizing: border-box;
+/* ========== إعداد عام ========== */
+*{box-sizing:border-box;}
+html,body{
+  margin:0;padding:0;
+  font-family:'Tajawal',Arial,sans-serif;
+  background:var(--beige);color:var(--dark);
+  height:100%;
 }
 
-html,
-body {
-  margin: 0;
-  padding: 0;
-  font-family: 'Tajawal', Arial, sans-serif;
-  background: var(--beige);
-  color: var(--dark);
-  height: 100%;
+/* رأس الصفحة */
+.site-header{
+  background:var(--red);color:#fff;
+  padding:16px 24px;text-align:center;
+  font-size:1.5rem;font-weight:700;
+  box-shadow:0 4px 8px rgba(0,0,0,.2);
 }
 
-/* =========================
-   رأس الصفحة
-   ========================= */
-.site-header {
-  background-color: var(--red);
-  color: #fff;
-  padding: 16px 24px;
-  text-align: center;
-  font-size: 1.5rem;
-  font-weight: 700;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+/* أدوات البحث/الفرز */
+.controls{
+  display:flex;gap:12px;justify-content:center;
+  padding:16px 24px;background:var(--beige);
+  position:sticky;top:0;z-index:10;
+  box-shadow:0 2px 6px rgba(0,0,0,.05);
+}
+.controls input,.controls select{
+  padding:10px 14px;border:2px solid var(--brown);
+  border-radius:8px;font-size:1rem;min-width:180px;
+  background:#fff;color:var(--dark);
 }
 
-/* =========================
-   أدوات التحكم (بحث وتصفية)
-   ========================= */
-.controls {
-  display: flex;
-  gap: 12px;
-  padding: 16px 24px;
-  justify-content: center;
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  background-color: var(--beige);
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+/* قائمة الأطباق (Scroll-Snap) */
+.menu{
+  height:calc(100vh - 130px);
+  overflow-y:auto;scroll-snap-type:y mandatory;
+  padding:20px;
+}
+.menu::-webkit-scrollbar{width:6px;}
+.menu::-webkit-scrollbar-thumb{background:var(--brown);border-radius:3px;}
+
+/* بطاقة الطبق */
+.menu-item{
+  scroll-snap-align:start;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:16px;height:90vh;padding:20px;
+  opacity:0;transform:translateY(40px);
+  transition:opacity .6s ease,transform .6s ease;
+}
+.menu-item.visible{opacity:1;transform:none;}
+
+/* صورة الطبق */
+.image-wrapper{
+  width:260px;height:260px;border-radius:18px;overflow:hidden;position:relative;
+}
+.image-wrapper img{width:100%;height:100%;object-fit:cover;display:block;}
+.image-wrapper::before{
+  content:"";position:absolute;inset:0;border:4px solid var(--red);
+  border-radius:18px;box-shadow:inset 0 0 0 3px #fff,inset 0 0 0 6px var(--red);
+  pointer-events:none;
 }
 
-.controls input,
-.controls select {
-  padding: 10px 14px;
-  border: 2px solid var(--brown);
-  border-radius: 8px;
-  font-size: 1rem;
-  min-width: 180px;
-  background-color: #fff;
-  color: var(--dark);
+/* تفاصيل الطبق */
+.dish-info{
+  background:var(--brown);color:#fff;text-align:center;
+  padding:12px 16px;border-radius:14px;max-width:260px;
+  box-shadow:0 4px 12px rgba(0,0,0,.2);
 }
-
-/* =========================
-   قائمة الأطباق (Scroll Snap)
-   ========================= */
-.menu {
-  height: calc(100vh - 130px);
-  overflow-y: auto;
-  scroll-snap-type: y mandatory;
-  padding: 20px;
-}
-
-.menu::-webkit-scrollbar {
-  width: 6px;
-}
-.menu::-webkit-scrollbar-thumb {
-  background: var(--brown);
-  border-radius: 3px;
-}
-
-/* =========================
-   عنصر الطبق
-   ========================= */
-.menu-item {
-  scroll-snap-align: start;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-  height: 90vh;
-  padding: 20px;
-  opacity: 0;
-  transform: translateY(40px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
-}
-
-.menu-item.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* =========================
-   صورة الطبق
-   ========================= */
-.image-wrapper {
-  width: 260px;
-  height: 260px;
-  border-radius: 18px;
-  overflow: hidden;
-  position: relative;
-}
-
-.image-wrapper img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-
-.image-wrapper::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border: 4px solid var(--red);
-  border-radius: 18px;
-  box-shadow: inset 0 0 0 3px #fff, inset 0 0 0 6px var(--red);
-  pointer-events: none;
-}
-
-/* =========================
-   معلومات الطبق
-   ========================= */
-.dish-info {
-  background: var(--brown);
-  color: #fff;
-  text-align: center;
-  padding: 12px 16px;
-  border-radius: 14px;
-  max-width: 260px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-}
-
-.dish-info h2 {
-  margin: 0 0 6px;
-  font-size: 1.25rem;
-}
-
-.dish-info .price {
-  font-weight: bold;
-  font-size: 1.1rem;
-}
-
-.dish-info .rating {
-  margin-top: 4px;
-  font-size: 1rem;
-  letter-spacing: 1px;
-  color: gold;
-}
+.dish-info h2{margin:0 0 6px;font-size:1.25rem;}
+.dish-info .price{font-weight:700;font-size:1.1rem;}
+.dish-info .rating{margin-top:4px;font-size:1rem;letter-spacing:1px;color:gold;}
