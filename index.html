@@ -1,95 +1,43 @@
-<!DOCTYPE html><html lang="ar" dir="rtl">
-<head>
-  <meta charset="UTF-8">
-  <title>بطاقة طبق - روستو</title>
-  <!-- Google Font Tajawal for Arabic clean look -->
-  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
-  <style>
-    :root{
-      /* ألوان رستو الأساسية */
-      --rosto-red:#C1272D;
-      --rosto-brown:#A67C52;
-      --rosto-beige:#F5EFE0;
-    }
-    body{
-      background:var(--rosto-beige);
-      display:flex;
-      justify-content:center;
-      align-items:center;
-      min-height:100vh;
-      font-family:'Tajawal',sans-serif;
-    }/* الحاوية الرئيسية لبطاقة الطبق */
-.menu-card{
-  width:320px; /* مربع يشبه أبعاد صورة بروفايل واتس (يمكن تكبيرها) */
-  position:relative;
-  background:var(--rosto-brown);
-  padding:16px;
-  border-radius:20px;
-  box-shadow:0 6px 20px rgba(0,0,0,.2);
-}
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>قائمة روستو للمشويات</title>
+    
+    <!-- خطوط اختيارية -->
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet" />
 
-/* مربع اسم الطبق ملتصق بأعلى الصورة */
-.menu-card .dish-name{
-  position:absolute;
-  top:-20px;
-  left:50%;
-  transform:translateX(-50%);
-  background:var(--rosto-red);
-  color:#fff;
-  padding:6px 16px;
-  font-size:1.1rem;
-  font-weight:700;
-  border-radius:12px;
-  box-shadow:0 4px 10px rgba(0,0,0,.15);
-  white-space:nowrap;
-}
+    <!-- ملف التنسيقات -->
+    <link rel="stylesheet" href="styles.css" />
+  </head>
 
-/* إطار الصورة المربعة */
-.menu-card .image-wrapper{
-  width:100%;
-  padding-top:100%; /* يحافظ على نسبة 1:1 لتكون مربعة */
-  position:relative;
-  overflow:hidden;
-  border-radius:15px;
-}
+  <body>
+    <!-- رأس الصفحة -->
+    <header class="site-header">
+      <h1>روستو | قائمة المشويات</h1>
+    </header>
 
-.menu-card .image-wrapper img{
-  position:absolute; top:0; left:0;
-  width:100%; height:100%;
-  object-fit:cover;
-}
+    <!-- أدوات البحث والفرز -->
+    <section class="controls">
+      <input
+        id="search"
+        type="text"
+        placeholder="ابحث عن طبق…"
+        aria-label="بحث عن طبق"
+      />
+      <select id="price" aria-label="فلتر السعر">
+        <option value="all">كل الأسعار</option>
+        <option value="cheap">≤ 30 ج</option>
+        <option value="medium">31 – 60 ج</option>
+        <option value="expensive">> 60 ج</option>
+      </select>
+    </section>
 
-/* زخرفة الإطار الخارجي للصورة */
-.menu-card .image-wrapper::before{
-  content:"";
-  position:absolute; inset:0;
-  border:4px solid var(--rosto-red);
-  border-radius:15px;
-  pointer-events:none;
-  /* طبقتان لإضافة عمق */
-  box-shadow:inset 0 0 0 3px #fff, inset 0 0 0 6px var(--rosto-red);
-}
+    <!-- القائمة الديناميكية -->
+    <main id="menu" class="menu"></main>
 
-/* زخرفة إضافية (مستطيل منقط داخلي) لإحساس كلاسيكي */
-.menu-card .image-wrapper::after{
-  content:"";
-  position:absolute; inset:12px;
-  border:2px dashed #ffffff80;
-  border-radius:10px;
-  pointer-events:none;
-}
-
-  </style>
-</head>
-<body>
-  <div class="menu-card">
-    <!-- اسم الطبق -->
-    <span class="dish-name">بوكس كفتة ميكس</span>
-    <!-- صورة الطبق -->
-    <div class="image-wrapper">
-      <!-- استبدل المسار dish.jpg بمسار صورتك -->
-      <img src="dish.jpg" alt="بوكس كفتة ميكس">
-    </div>
-  </div>
-</body>
+    <!-- سكربت التشغيل -->
+    <script src="script.js"></script>
+  </body>
 </html>
