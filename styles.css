@@ -75,3 +75,51 @@ html,body{
 .dish-info h2{margin:0 0 6px;font-size:1.25rem;}
 .dish-info .price{font-weight:700;font-size:1.1rem;}
 .dish-info .rating{margin-top:4px;font-size:1rem;letter-spacing:1px;color:gold;}
+.image-wrapper {
+  width: 100%;
+  max-width: 280px;
+  aspect-ratio: 1 / 1;
+  height: auto;
+  border-radius: 18px;
+  overflow: hidden;
+  position: relative;
+  margin: auto;
+}
+
+.menu-item {
+  width: 100%;
+  max-width: 100vw;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+@media (max-width: 480px) {
+  .dish-info {
+    padding: 10px;
+    font-size: 0.95rem;
+    max-width: 90%;
+  }
+
+  .dish-info h2 {
+    font-size: 1.1rem;
+  }
+
+  .dish-info .price {
+    font-size: 1rem;
+  }
+
+  .dish-info .rating {
+    font-size: 0.95rem;
+  }
+
+  .controls {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .controls input,
+  .controls select {
+    width: 100%;
+    max-width: 90%;
+  }
+} 
