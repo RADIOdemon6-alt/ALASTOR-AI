@@ -10,7 +10,9 @@
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{
   font-family:'Tajawal',Arial,sans-serif;
-  background:var(--beige);color:var(--dark);height:100%;
+  background:var(--beige);color:var(--dark);
+  height:100%;
+  overflow-x:hidden; /* ✅ منع السكرول الأفقي */
 }
 
 /* رأس الصفحة */
@@ -83,4 +85,43 @@ html,body{
   .dish-info h2{font-size:1rem}
   .dish-info .price{font-size:.95rem}
   .dish-info .rating{font-size:.85rem}
+}
+
+/* ========= تعديل إضافي للموبايل الأضيق ========= */
+@media screen and (max-width: 450px){
+  /* تقليل الهوامش بين العناصر */
+  .menu-item{
+    margin-bottom:16px;
+    padding:12px;
+  }
+
+  /* جعل البحث والفلترة جنب بعض بدون انزلاق */
+  .controls{
+    flex-direction:row;
+    flex-wrap:nowrap;
+    overflow-x:auto;
+    padding:10px;
+    gap:8px;
+  }
+
+  .controls input,
+  .controls select{
+    flex:1 1 100px;
+    max-width:48%;
+    font-size:.85rem;
+  }
+
+  .dish-info{
+    max-width:95%;
+    font-size:.8rem;
+    padding:8px 10px;
+  }
+
+  .dish-info h2{font-size:.95rem}
+  .dish-info .price{font-size:.9rem}
+  .dish-info .rating{font-size:.8rem}
+
+  .image-wrapper{
+    max-width:150px;
+  }
 }
